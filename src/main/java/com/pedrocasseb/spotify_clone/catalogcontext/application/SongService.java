@@ -11,6 +11,8 @@ import com.pedrocasseb.spotify_clone.catalogcontext.repository.SongRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Transactional
 @Service
 public class SongService {
@@ -40,6 +42,5 @@ public class SongService {
         songContentRepository.save(songContent);
         return songMapper.songToReadSongInfoDTO(songSaved);
     }
-
 
 }
