@@ -43,4 +43,9 @@ public class SongService {
         return songMapper.songToReadSongInfoDTO(songSaved);
     }
 
+    @Transactional(readOnly = true)
+    public List<ReadSongInfoDTO> getAll() {
+        return songRepository.findAll().stream().map(songMapper::songToReadSongInfoDTO).toList();
+    }
+
 }
