@@ -13,18 +13,21 @@ import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
-    
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf
-                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .ignoringRequestMatchers("/api/logout"))  // Or configure CSRF properly
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/logout").permitAll()
-                .anyRequest().authenticated()
-            );
-        
+                .csrf(csrf -> csrf
+                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                        .ignoringRequestMatchers("/api/logout") // CSRF desabilitado só no logout
+                )
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.POST, "/api/songs").authenticated()// 👈 necessário!
+                        .requestMatchers("/api/logout").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .cors(Customizer.withDefaults());
+
         return http.build();
     }
 }
