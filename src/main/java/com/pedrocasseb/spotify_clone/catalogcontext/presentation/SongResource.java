@@ -16,13 +16,16 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -83,5 +86,13 @@ public class SongResource {
     @GetMapping("/songs")
     public ResponseEntity<List<ReadSongInfoDTO>> getAll() {
         return ResponseEntity.ok(songService.getAll());
+    }
+
+    @GetMapping("/songs/get-content")
+    public ResponseEntity<SongContentDTO> getOneByPublicId(@RequestParam UUID publicId) {
+        Optional<SongContentDTO> songContentByPublicId = songService.getOneByPublicId(publicId);
+        return songContentByPublicId.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity
+                        .of(ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, "UUID Unknown")).build());
     }
 }
