@@ -23,7 +23,7 @@ public class SecurityConfiguration {
         http
                 .csrf(csrf -> csrf
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                        .ignoringRequestMatchers("/api/logout", "/api/songs") // ✅ Ignora CSRF para upload de arquivos
+                        .ignoringRequestMatchers("/api/logout", "/api/songs", "/api/songs/like") // ✅ ADICIONAR /api/songs/like
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/api/songs").authenticated()
